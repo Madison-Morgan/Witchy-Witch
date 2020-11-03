@@ -1,24 +1,26 @@
 import React from "react";
 
-export default function Sprite({image, data}){
+export default function Sprite({ image, data, position }) {
     console.log(data);
     const { x,
-         y, 
-         w, 
-         h } = data;
-    console.log(y);
-    return( <div
-    style={
-        {
-           display: "block",
-           height:  `${h}px`,
-           width: `${w}px`,
-           backgroundImage: 'url(' + image + ')',
-           backgroundRepeat: "no-repeat",
-           backgroundPosition: `-${x}px -${y}px`,
-        }
-    } 
-    
-    />
+        y,
+        w,
+        h } = data;
+    return (
+        <div
+            style={
+                {
+                    position: "absolute",
+                    top: position.y,
+                    left: position.x,
+                    height: `${h}px`,
+                    width: `${w}px`,
+                    backgroundImage: 'url(' + image + ')',
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: `-${x}px -${y}px`,
+                }
+            }
+
+        />
     );
 }
