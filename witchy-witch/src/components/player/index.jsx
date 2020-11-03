@@ -6,5 +6,5 @@ export default function Player(){
         h: 274,
         w: 214,
       };
-    return <Actor sprite={'../src/components/sprites/witch_stand.png'} data={data} />
+    return <Actor sprite={'/witch_stand.png'} data={data} />
 }

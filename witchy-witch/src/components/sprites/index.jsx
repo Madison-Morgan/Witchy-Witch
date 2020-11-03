@@ -13,9 +13,9 @@ export default function Sprite({image, data}){
            display: "block",
            height:  `${h}px`,
            width: `${w}px`,
-           background: `url(${image})`,
-           //backgroundRepeat: "no-repeat",
-           //backgroundPosition: `-${x}px -${y}px`,
+           backgroundImage: 'url(' + image + ')',
+           backgroundRepeat: "no-repeat",
+           backgroundPosition: `-${x}px -${y}px`,
         }
     } 
     
