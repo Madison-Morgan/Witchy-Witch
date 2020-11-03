@@ -5,14 +5,15 @@ export default function useWalk(maxSteps) {
     const [dir, setDir] = useState(0);
     const [step, setStep] = useState(0);
 
+    
     const directions = {
-        down: 0,
-        left: 1,
-        right: 2,
+        right: 1,
+        left: 0,
+        down: 2,
         up: 3,
     };
-
     const stepSize = 16;
+    
 
     const modifier = {
         down: { x: 0, y: stepSize },
@@ -28,7 +29,10 @@ export default function useWalk(maxSteps) {
             }
             return directions[dir];
         });
-        setStep(prev => prev < maxSteps - 1 ? prev + 1 : 0);
+        setStep(prev => {
+            const offset = directions[dir]===directions["right"] ? 0 : 8;
+            return prev < (maxSteps+offset) - 1 ? prev + 1 : (0+offset);
+        });
     }
 
     function move(dir){

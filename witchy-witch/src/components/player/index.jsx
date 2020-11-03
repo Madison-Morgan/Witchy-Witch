@@ -4,10 +4,10 @@ import useKeyPress from "../../hooks/use-key-press";
 import useWalk from "../../hooks/use-walk";
 
 export default function Player() {
-  const { dir, step, walk, position } = useWalk(3);
+  const { dir, step, walk, position } = useWalk(8); //8 frames of animation
   const data = {
-    h: 274,
-    w: 214,
+    h: 212,
+    w: 160,
   };
 
   
@@ -19,9 +19,9 @@ export default function Player() {
 
   return (
   <Actor 
-    sprite={'/witch_stand.png'} 
+    sprite={'/witch_sprite_sheet.png'} 
     data={data} 
-    steps={step} 
+    step={step} 
     dir={dir} 
     position={position}
   />);
