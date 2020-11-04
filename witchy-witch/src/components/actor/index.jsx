@@ -11,8 +11,8 @@ export default function Actor({ sprite, data, position={x:0, y:0}, step = 0, dir
             image={sprite}
             position = {position}
             data={{
-                x: dir * w,
-                y: step * h,
+                x: step.x * w,
+                y: step.y * h,
                 w,
                 h
             }}

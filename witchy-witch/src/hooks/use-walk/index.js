@@ -3,14 +3,26 @@ import { useState, useEffect } from "react";
 export default function useWalk(maxSteps) {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [dir, setDir] = useState(0);
-    const [step, setStep] = useState(0);
+    const [step, setStep] = useState({ x: 0, y: 0 });
 
-    const directions = {
+    const directions = { //in terms of y/height component
         right: 0,
-        left: 1,
+        left: 8,
         /* up: 16,
         down: 24, */
     };
+
+    const animation = { // in terms of x/width component
+        0: {
+            "stand": 0,
+            "run": 1,
+        },
+        8: {
+            "stand": 1,
+            "run": 0,
+        },
+    };
+
     const stepSize = 20;
 
     const modifier = {
@@ -20,14 +32,12 @@ export default function useWalk(maxSteps) {
         up: { x: 0, y: -stepSize },
     }
 
-    console.log("dir"+dir.toString());
-    useEffect(() => {
+    useEffect(() => { //animate the standing
         const timer = window.setInterval(() => {
             setStep(prev => {
-                const offset = dir===directions["right"] ? 0 : 8;
-                console.log("Offset: "+dir.toString());
-
-                return prev < (maxSteps+offset) - 1 ? prev + 1 : (0+offset);
+                const x = animation[dir]["stand"];
+                const y = prev.y < (maxSteps + dir) - 1 ? prev.y + 1 : (0 + dir);
+                return { x, y };
             });
         }, 125);
         return () => {
@@ -35,21 +45,31 @@ export default function useWalk(maxSteps) {
         };
     }, [step]);
 
-    function walk(dir) {
+
+    function walk(dir) { //animate the walking
+        let isStanding = false;
+        let newDirection = directions[dir];
         setDir(prev => {
-            if(directions[dir] === prev){
+            if (newDirection === prev) {
                 move(dir);
             }
-            return directions[dir];
+            else {
+                isStanding = true;
+            }
+            return newDirection;
         });
-        setStep(prev => {
-            const offset = directions[dir]===directions["right"] ? 0 : 8;
-            return prev < (maxSteps+offset) - 1 ? prev + 1 : (0+offset);
-        });
+        if (!isStanding) {
+            //console.log("INEEHEHHE");
+            setStep(prev => {
+                const x = animation[newDirection]["run"];
+                const y = prev.y < (maxSteps + newDirection) - 1 ? prev.y + 1 : (0 + newDirection);
+                return { x, y };
+            });
+        }
     }
 
 
-    function move(dir){
+    function move(dir) {
         setPosition(prev => ({
             x: prev.x + modifier[dir].x,
             y: prev.y + modifier[dir].y,
