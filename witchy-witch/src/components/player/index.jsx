@@ -4,13 +4,12 @@ import useKeyPress from "../../hooks/use-key-press";
 import useWalk from "../../hooks/use-walk";
 
 export default function Player() {
-  const { dir, step, walk, position } = useWalk(8); //8 frames of animation
+  const MAX_STEPS = 8;
+  const { dir, step, walk, position } = useWalk(MAX_STEPS); //8 frames of animation
   const data = {
     h: 212,
     w: 160,
   };
-
-  
 
   useKeyPress((e) => {
     walk(e.key.replace("Arrow", "").toLowerCase());

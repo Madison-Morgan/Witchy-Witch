@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Sprite({ image, data, position }) {
-    console.log(data);
+    //console.dir(data);
     const { x,
         y,
         w,

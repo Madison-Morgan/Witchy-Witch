@@ -1,19 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function useWalk(maxSteps) {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [dir, setDir] = useState(0);
     const [step, setStep] = useState(0);
 
-    
     const directions = {
-        right: 1,
-        left: 0,
-        down: 2,
-        up: 3,
+        right: 0,
+        left: 1,
+        /* up: 16,
+        down: 24, */
     };
-    const stepSize = 16;
-    
+    const stepSize = 20;
 
     const modifier = {
         down: { x: 0, y: stepSize },
@@ -21,6 +19,21 @@ export default function useWalk(maxSteps) {
         right: { x: stepSize, y: 0 },
         up: { x: 0, y: -stepSize },
     }
+
+    console.log("dir"+dir.toString());
+    useEffect(() => {
+        const timer = window.setInterval(() => {
+            setStep(prev => {
+                const offset = dir===directions["right"] ? 0 : 8;
+                console.log("Offset: "+dir.toString());
+
+                return prev < (maxSteps+offset) - 1 ? prev + 1 : (0+offset);
+            });
+        }, 125);
+        return () => {
+            window.clearInterval(timer);
+        };
+    }, [step]);
 
     function walk(dir) {
         setDir(prev => {
@@ -35,12 +48,14 @@ export default function useWalk(maxSteps) {
         });
     }
 
+
     function move(dir){
         setPosition(prev => ({
             x: prev.x + modifier[dir].x,
             y: prev.y + modifier[dir].y,
         }));
     }
+
 
     return {
         walk, dir, step, position,
