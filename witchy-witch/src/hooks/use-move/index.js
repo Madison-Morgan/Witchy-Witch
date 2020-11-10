@@ -1,26 +1,37 @@
 import { useState, useEffect } from "react";
 
-export default function useWalk(maxSteps) {
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+export default function useMove(maxSteps) {
+    const [position, setPosition] = useState({ x: 500, y: 500 });
     const [dir, setDir] = useState(0);
     const [step, setStep] = useState({ x: 0, y: 0 });
+    const [motion, setMotion] = useState("stand"); //stand, jump, run, down
 
     const directions = { //in terms of y/height component
         right: 0,
         left: 8,
-        /* up: 16,
-        down: 24, */
+    };
+
+    const movement = {
+        "stand":0, 
+        "jump":1,
+        "run":2, 
+        "down":3,
     };
 
     const animation = { // in terms of x/width component
         0: {
             "stand": 0,
+            "jump": 0,
             "run": 1,
+            "down": 2,
         },
         8: {
             "stand": 1,
+            "jump": 1,
             "run": 0,
+            "down": 2,
         },
+
     };
 
     const stepSize = 20;
@@ -32,13 +43,24 @@ export default function useWalk(maxSteps) {
         up: { x: 0, y: -stepSize },
     }
 
-    useEffect(() => { //animate the standing
+    useEffect(() => { //animate the standing 
         const timer = window.setInterval(() => {
-            setStep(prev => {
-                const x = animation[dir]["stand"];
-                const y = prev.y < (maxSteps + dir) - 1 ? prev.y + 1 : (0 + dir);
-                return { x, y };
-            });
+
+            if () {
+                setStep(prev => {
+                    const x = animation[dir]["stand"];
+                    const y = prev.y < (maxSteps + dir) - 1 ? prev.y + 1 : (0 + dir);
+                    return { x, y };
+                });
+            }
+            else if () {
+                move(dir);
+                setStep(prev => {
+                    const x = prev.x < steps - 1 ? prev.x + 1 : 0;
+                    const y = animation[newDirection][dir];
+                    return { x, y };
+                });
+            }
         }, 125);
         return () => {
             window.clearInterval(timer);
@@ -47,15 +69,13 @@ export default function useWalk(maxSteps) {
 
 
     function walk(dir) { //animate the walking
-        let isStanding = false;
         let newDirection = directions[dir];
         setDir(prev => {
             if (newDirection === prev) {
                 move(dir);
+                setMotion
             }
-            else {
-                isStanding = true;
-            }
+
             return newDirection;
         });
         if (!isStanding) {
@@ -78,6 +98,6 @@ export default function useWalk(maxSteps) {
 
 
     return {
-        walk, dir, step, position,
+        walk, jump, dir, step, position,
     }
 }
