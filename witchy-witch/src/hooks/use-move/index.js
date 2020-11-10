@@ -11,13 +11,6 @@ export default function useMove(maxSteps) {
         left: 8,
     };
 
-    const movement = {
-        "stand":0, 
-        "jump":1,
-        "run":2, 
-        "down":3,
-    };
-
     const animation = { // in terms of x/width component
         0: {
             "stand": 0,
@@ -40,24 +33,31 @@ export default function useMove(maxSteps) {
         down: { x: 0, y: stepSize },
         left: { x: -stepSize, y: 0 },
         right: { x: stepSize, y: 0 },
-        up: { x: 0, y: -stepSize },
     }
 
     useEffect(() => { //animate the standing 
         const timer = window.setInterval(() => {
-
-            if () {
+            const steps = 24;
+            console.log(motion);
+            if (motion === "stand") {
                 setStep(prev => {
                     const x = animation[dir]["stand"];
                     const y = prev.y < (maxSteps + dir) - 1 ? prev.y + 1 : (0 + dir);
                     return { x, y };
                 });
             }
-            else if () {
-                move(dir);
+            else if (motion === "jump") {
+                jump();
                 setStep(prev => {
-                    const x = prev.x < steps - 1 ? prev.x + 1 : 0;
-                    const y = animation[newDirection][dir];
+                    let x;
+                    if (prev.x < steps) {
+                        x = prev.x + 1;
+                    }
+                    else {
+                        x = 0;
+                        setMotion("stand");
+                    }
+                    const y = animation[dir]["jump"];
                     return { x, y };
                 });
             }
@@ -68,36 +68,56 @@ export default function useMove(maxSteps) {
     }, [step]);
 
 
-    function walk(dir) { //animate the walking
-        let newDirection = directions[dir];
-        setDir(prev => {
-            if (newDirection === prev) {
-                move(dir);
-                setMotion
-            }
+    function walk(key) { //animate the running, jumping
+        if (key === "right" || key === "left") {
+            let newDirection = directions[key];
+            setDir(prev => {
+                if (newDirection === prev) {
+                    move(key);
+                    setMotion("run");
+                }
+                else {
+                    setMotion("stand");
+                }
 
-            return newDirection;
-        });
-        if (!isStanding) {
-            //console.log("INEEHEHHE");
-            setStep(prev => {
-                const x = animation[newDirection]["run"];
-                const y = prev.y < (maxSteps + newDirection) - 1 ? prev.y + 1 : (0 + newDirection);
-                return { x, y };
+                return newDirection;
             });
+            if (motion === "run") {
+                setStep(prev => {
+                    const x = animation[newDirection]["run"];
+                    const y = prev.y < (maxSteps + newDirection) - 1 ? prev.y + 1 : (0 + newDirection);
+                    return { x, y };
+                });
+            }
         }
+        else if (key === "up") {
+            setMotion("jump");
+        }
+
+
     }
 
 
-    function move(dir) {
+    function move(key) {
         setPosition(prev => ({
-            x: prev.x + modifier[dir].x,
-            y: prev.y + modifier[dir].y,
+            x: prev.x + modifier[key].x,
+            y: prev.y + modifier[key].y,
         }));
+    }
+
+    function jump() {
+        let multiplier = dir === directions["right"] ? 1 : -1;
+        setPosition(prev => {
+            const x = prev.x + stepSize * multiplier;
+            let modY = step < 12 ? -stepSize : stepSize;
+            const y = prev.y + modY;
+            return { x, y };
+        });
+
     }
 
 
     return {
-        walk, jump, dir, step, position,
+        walk, dir, step, position, motion,
     }
 }

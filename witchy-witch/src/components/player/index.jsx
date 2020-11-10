@@ -5,42 +5,37 @@ import useMove from "../../hooks/use-move";
 
 export default function Player() {
   const MAX_STEPS = 8;
-  var keyPress="default";
+  var extension="default";
   var data; 
-  const { dir, step, walk, jump, position } = useMove(MAX_STEPS); //8 frames of animation
+  const { dir, step, walk, motion, position } = useMove(MAX_STEPS); //8 frames of animation
   
 
   useKeyPress((e) => {
-    keyPress = e.key.replace("Arrow", "").toLowerCase();
+    let keyPress = e.key.replace("Arrow", "").toLowerCase();
     console.log(keyPress);
-    if(keyPress==="up"){
-      jump(keyPress);
-    }
-    else{
-      walk(keyPress);
-    }
+    walk(keyPress);
     e.preventDefault();
   })
 
   
-  if(!(keyPress==="up")){
-    keyPress="idle";
+  if(!(motion==="jump")){
+    extension="idle";
     data = {
       h: 212,
       w: 160,
     };
   }
   else{
+    extension="up"
     data = {
-      h:479,
-      w:360,
+      h:360,
+      w:479,
     };
   }
-
   
   return (
   <Actor 
-    sprite={'/sprites/witch/'+keyPress+'.png'} 
+    sprite={'/sprites/witch/'+extension+'.png'} 
     data={data} 
     step={step} 
     dir={dir} 

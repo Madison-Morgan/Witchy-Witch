@@ -4,8 +4,9 @@ import Sprite from "../sprites";
 export default function Actor({ sprite, data, position={x:0, y:0}, step = 0, dir = 0 }) {
     const { h, w } = data;
     //console.log("Here is fir: "+(dir*w).toString());
-    //console.log("Here is sec: "+(step*h).toString());
-    //console.log("step : "+step.toString());
+    //console.log("Here is sec: "+(step.x).toString());
+    //console.log("step : "+(step.y).toString());
+    console.log("h: "+h.toString());
     return (
         <Sprite
             image={sprite}
