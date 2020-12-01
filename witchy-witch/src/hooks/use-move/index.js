@@ -1,100 +1,34 @@
 import { useState, useEffect } from "react";
 
-export default function useMove(maxSteps) {
-    const [position, setPosition] = useState({ x: 500, y: 500 });
+export default function useMove(frameSize, initialPosition, sprite) {
+    const [position, setPosition] = useState(initialPosition); //({ x: 50, y: 50 });
     const [dir, setDir] = useState(0);
     const [step, setStep] = useState({ x: 0, y: 0 });
-    const [motion, setMotion] = useState("stand"); //stand, jump, run, down
+    const [motion, setMotion] = useState("Idle"); //Idle, Jump, Run
 
-    const directions = { //in terms of y/height component
-        right: 0,
-        left: 8,
-    };
-
-    const animation = { // in terms of x/width component
-        0: {
-            "stand": 0,
-            "jump": 0,
-            "run": 1,
-            "down": 2,
-        },
-        8: {
-            "stand": 1,
-            "jump": 1,
-            "run": 0,
-            "down": 2,
-        },
-
-    };
-
-    const stepSize = 20;
-
+    const stepSize = 10;
     const modifier = {
         down: { x: 0, y: stepSize },
         left: { x: -stepSize, y: 0 },
         right: { x: stepSize, y: 0 },
     }
-
-    useEffect(() => { //animate the standing 
-        const timer = window.setInterval(() => {
-            const steps = 24;
-            console.log(motion);
-            if (motion === "stand") {
-                setStep(prev => {
-                    const x = animation[dir]["stand"];
-                    const y = prev.y < (maxSteps + dir) - 1 ? prev.y + 1 : (0 + dir);
-                    return { x, y };
-                });
-            }
-            else if (motion === "jump") {
-                jump();
-                setStep(prev => {
-                    let x;
-                    if (prev.x < steps) {
-                        x = prev.x + 1;
-                    }
-                    else {
-                        x = 0;
-                        setMotion("stand");
-                    }
-                    const y = animation[dir]["jump"];
-                    return { x, y };
-                });
-            }
-        }, 125);
-        return () => {
-            window.clearInterval(timer);
-        };
-    }, [step]);
+    const directions = {
+        "right": 0,
+        "left": 1
+    }
 
 
-    function walk(key) { //animate the running, jumping
-        if (key === "right" || key === "left") {
-            let newDirection = directions[key];
-            setDir(prev => {
-                if (newDirection === prev) {
-                    move(key);
-                    setMotion("run");
-                }
-                else {
-                    setMotion("stand");
-                }
-
-                return newDirection;
-            });
-            if (motion === "run") {
-                setStep(prev => {
-                    const x = animation[newDirection]["run"];
-                    const y = prev.y < (maxSteps + newDirection) - 1 ? prev.y + 1 : (0 + newDirection);
-                    return { x, y };
-                });
-            }
-        }
-        else if (key === "up") {
-            setMotion("jump");
-        }
-
-
+    function walk(direction, steps){
+        setDir(directions[direction]);
+        setMotion("Run");
+        move(direction);
+        var MAX_STEPS = determineAnimation();
+        setStep(prev => {
+            const x = prev.x < (MAX_STEPS  - 1) ? prev.x + 1 :0;
+            const y = dir
+            return { x, y };
+        });
+        
     }
 
 
@@ -105,19 +39,16 @@ export default function useMove(maxSteps) {
         }));
     }
 
-    function jump() {
-        let multiplier = dir === directions["right"] ? 1 : -1;
-        setPosition(prev => {
-            const x = prev.x + stepSize * multiplier;
-            let modY = step < 12 ? -stepSize : stepSize;
-            const y = prev.y + modY;
-            return { x, y };
-        });
 
+    function determineAnimation(){
+        var img = new Image();
+        img.src = sprite + motion + ".png";
+        var steps = img.width / frameSize["w"];
+        return steps;
     }
-
 
     return {
-        walk, dir, step, position, motion,
+        dir, walk, step, motion, position
     }
+
 }
