@@ -12,7 +12,7 @@ export default function App() {
           initialPosition={{x:0,y:0}}/> */}
         <Enemy
             color={'Red'}
-            initialPosition={{x:50,y:50}}/>
+            initialPosition={{x:0,y:0}}/>
     </div>
   );
 }

@@ -23,6 +23,7 @@ export default function useMove(frameSize, initialPosition, sprite) {
         setMotion("Run");
         move(direction);
         var MAX_STEPS = determineAnimation();
+        
         setStep(prev => {
             const x = prev.x < (MAX_STEPS  - 1) ? prev.x + 1 :0;
             const y = dir

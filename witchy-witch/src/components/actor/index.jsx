@@ -3,10 +3,11 @@ import Sprite from "../sprites";
 
 export default function Actor({ sprite, data, position, step = 0, dir = 0 }) {
     const { h, w } = data;
-    console.log("h: "+h.toString());
+    console.log("step: "+sprite.toString());
+
     return (
         <Sprite
-            image={sprite}
+            image={sprite+".png"}
             position = {position}
             data={{
                 x: step.x * w,

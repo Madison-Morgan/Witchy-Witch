@@ -1,24 +1,24 @@
 import React from "react";
 import Actor from "../actor";
 import useMove from "../../hooks/use-move";
+import useKeyPress from "../../hooks/use-key-press";
 
 
 
 export default function Enemy({ color, initialPosition }) {
     const frameSize = { h: 32, w: 32 };
-    const spritePath = "/enemy/" + color + "/";
+    const spritePath = "/sprites/enemy/" + color + "/";
 
     //return the direction of motion, step in animation, motion (idle, run, jump, down), 
     //position x-y coord on screen
-    const { dir, walk, step, motion, position } = useMove(frameSize, initialPosition, color);
+    const { dir, walk, step, motion, position } = useMove(frameSize, initialPosition, spritePath);
 
 
 
-    setInterval(func => {
-        for (var i = 0; i < 15; i++) {
-            walk("right")
-        }
-    }, 15000);
+    useKeyPress((e) => {
+        walk('right');
+        e.preventDefault();
+    })
 
 
 
