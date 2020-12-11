@@ -7,12 +7,12 @@ export default function App() {
   
   return (
     <div className="zone-container">
-      {/* <Player 
-          sprite={'/sprites/witch/idle'+'.png'} 
-          initialPosition={{x:0,y:0}}/> */}
-        <Enemy
+      <Player 
+          sprite={'/sprites/witch/'} 
+          initialPosition={{x:0,y:0}}/>
+        {/* <Enemy
             color={'Red'}
-            initialPosition={{x:0,y:0}}/>
+            initialPosition={{x:0,y:0}}/> */}
     </div>
   );
 }

@@ -1,13 +1,13 @@
 import React from "react";
 import Actor from "../actor";
 import useKeyPress from "../../hooks/use-key-press";
-import useMove from "../../hooks/use-move";
+import useMove from "../../hooks/use-move-player";
 
 export default function Player({sprite, initialPosition}) {
   const frameSize = {h: 212, w: 160 };
   //return the direction of motion, step in animation, motion (idle, run, jump, down), 
   //position x-y coord on screen
-  const { dir, step, walk, motion, position } = useMove(frameSize, initialPosition); //8 frames of animation
+  const { dir, step, walk, motion, position } = useMove(frameSize, initialPosition, sprite); //8 frames of animation
   
 
   useKeyPress((e) => {
@@ -16,9 +16,17 @@ export default function Player({sprite, initialPosition}) {
     e.preventDefault();
   })
   
+  var extension;
+  if(motion==="idle" || motion==="run"){
+    extension = "all";
+  }
+  else{
+    extension = motion;
+  }
+
   return (
   <Actor 
-    sprite={sprite}
+    sprite={sprite+extension}
     data={frameSize} 
     step={step} 
     dir={dir} 
