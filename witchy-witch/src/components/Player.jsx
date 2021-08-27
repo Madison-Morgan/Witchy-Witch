@@ -1,7 +1,7 @@
 import React from "react";
-import Actor from "../actor";
-import useKeyPress from "../../hooks/use-key-press";
-import useMove from "../../hooks/use-move-player";
+import Actor from "./Actor";
+import useKeyPress from "../hooks/use-key-press";
+import useMove from "../hooks/use-move-player";
 
 export default function Player({sprite, initialPosition}) {
   const frameSize = {h: 212, w: 160 };

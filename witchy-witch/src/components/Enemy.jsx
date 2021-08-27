@@ -1,8 +1,8 @@
 import React from "react";
 import { useEffect, useRef } from "react";
-import Actor from "../actor";
-import useMove from "../../hooks/use-move";
-import useKeyPress from "../../hooks/use-key-press";
+import Actor from "./Actor";
+import useMove from "../hooks/use-move";
+import useKeyPress from "../hooks/use-key-press";
 
 
 
